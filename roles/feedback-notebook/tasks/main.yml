@@ -1,0 +1,32 @@
+---
+- name: Download scanstation Software
+  win_get_url:
+     url: 'https://userdata.d120.de/hcarrasco/scanstation.exe'
+     dest: 'c:\users\Admin\scanstationsoftware.exe'
+     force: no
+
+- name: Copy silent installation file
+  win_copy:
+    src: files/setup.iss
+    dest: c:\users\Admin\setup.iss
+
+- name: Install Scansoftware
+  win_package:
+    path: 'c:\users\Admin\scanstationsoftware.exe'
+    product_id: '{6AFDA173-B844-4FD0-9DB7-528148556CC4}'
+    arguments: '/s /f1c:\users\Admin\setup.iss'
+
+- name: Install chocolatey and chrome
+  win_chocolatey:
+    name: googlechrome
+
+- name: Install pdf reader
+  win_chocolatey:
+    name: foxitreader
+
+- name: Install windows updates
+  win_updates:
+          category_names:
+                        - SecurityUpdates
+                        - CriticalUpdates
+                        - UpdateRollups
