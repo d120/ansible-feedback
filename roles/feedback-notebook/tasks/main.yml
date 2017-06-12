@@ -1,5 +1,5 @@
 ---
-- name: Download scanstation Software
+- name: Download Evasys scanstation Software
   win_get_url:
      url: 'https://userdata.d120.de/hcarrasco/scanstation.exe'
      dest: 'c:\users\Admin\scanstationsoftware.exe'
@@ -10,11 +10,40 @@
     src: files/setup.iss
     dest: c:\users\Admin\setup.iss
 
-- name: Install Scansoftware
+- name: Install Evasys Scansoftware
   win_package:
     path: 'c:\users\Admin\scanstationsoftware.exe'
     product_id: '{6AFDA173-B844-4FD0-9DB7-528148556CC4}'
     arguments: '/s /f1c:\users\Admin\setup.iss'
+
+- name: Copy Evasys config
+  win_copy:
+    src: files/Scanstation.ini
+    dest: 'c:\ProgramData\Electric Paper\EvaSys Scanstation\Scanstation.ini'
+
+- name: Download scanner driver
+  win_get_url:
+    url: 'https://userdata.d120.de/hcarrasco/scanner_driver.zip'
+    dest: 'c:\users\Admin\scanner_driver.zip'
+    force: no
+
+- name: Unzip scanner driver
+  win_unzip:
+    src: 'c:\users\Admin\scanner_driver.zip'
+    dest: 'c:\users\Admin\scanner_driver'
+
+- name: Copy scanner driver silent installation file
+  win_copy:
+    src: files/setup-driver.iss
+    dest: c:\users\Admin\setup-driver.iss
+
+- name: Install scanner driver
+  win_package:
+    path: 'c:\users\Admin\scanner_driver\Driver\setup.exe'
+    product_id: '{4844099D-00EB-4A51-A4A5-3A301DA733FF}'
+    arguments: '/s /f1c:\users\Admin\setup-driver.iss'
+
+
 
 - name: Install chocolatey and chrome
   win_chocolatey:
